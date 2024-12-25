@@ -62,9 +62,12 @@ const commonWarnNamingRules = [
     format: ['PascalCase'],
   },
 
+  //
   // Enforce that boolean variables are prefixed with an allowed verb
+  // https://typescript-eslint.io/rules/naming-convention/#enforce-that-boolean-variables-are-prefixed-with-an-allowed-verb
+  //
   {
-    selector: ['memberLike', 'variableLike'],
+    selector: ['variable', 'function', 'parameter'],
     types: ['boolean'],
     format: ['PascalCase'],
     prefix: ['can', 'did', 'has', 'is', 'must', 'need', 'should', 'will'],
