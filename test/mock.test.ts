@@ -1,7 +1,7 @@
 import { expect, test, vi } from 'vitest';
 
 describe('vi.fn', () => {
-  test('spy function no arguments and no returns', () => {
+  test.concurrent('spy function no arguments and no returns', () => {
     // Define mock function
     const getApples = vi.fn();
     // call mock function
@@ -10,7 +10,7 @@ describe('vi.fn', () => {
     expect(getApples).toHaveBeenCalled();
   });
 
-  test('spy function returns a product', () => {
+  test.concurrent('spy function returns a product', () => {
     const getProduct = vi.fn((product: string) => ({ product }));
 
     getProduct('apples');
@@ -20,7 +20,7 @@ describe('vi.fn', () => {
 });
 
 describe('mock.calls and mock.results', () => {
-  test('sample test', () => {
+  test.concurrent('sample test', () => {
     const fn = vi.fn();
 
     fn('hello', 1);
@@ -41,7 +41,7 @@ describe('spyOn', () => {
     getApples: () => 4,
   };
 
-  test('spy method', () => {
+  test.concurrent('spy method', () => {
     // Define mock method
     const spy = vi.spyOn(cart1, 'getApples');
     // call mock method
@@ -55,7 +55,7 @@ describe('spyOn', () => {
     getApples: () => 4,
   };
 
-  test('overwrite spy method', () => {
+  test.concurrent('overwrite spy method', () => {
     const spy = vi.spyOn(cart2, 'getApples').mockImplementation(() => 8);
     cart2.getApples();
     expect(spy).toHaveReturnedWith(8);
