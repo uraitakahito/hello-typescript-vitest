@@ -24,7 +24,7 @@ describe('mock.calls and mock.results', () => {
     fn('hello', 1);
 
     expect(vi.isMockFunction(fn)).toBe(true);
-    expect(fn.mock.calls[0]).toEqual(['hello', 1]);
+    expect(fn.mock.calls[0]).toStrictEqual(['hello', 1]);
 
     fn.mockImplementation((arg: string) => arg);
 
