@@ -1,5 +1,3 @@
-import { expect, test, vi } from 'vitest';
-
 describe('vi.fn', () => {
   test.concurrent('spy function no arguments and no returns', () => {
     // Define mock function
