@@ -7,7 +7,7 @@
     "lint": "eslint ."
   },
   "author": "",
-  "license": "Apache-2.0",
+  "license": "Unlicense",
   "description": "",
   "devDependencies": {
     "@stylistic/eslint-plugin": "^5.6.0",
