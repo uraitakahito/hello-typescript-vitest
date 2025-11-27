@@ -40,7 +40,5 @@
     "timonwong.shellcheck",
     // https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens
     "usernamehw.errorlens",
-    // https://marketplace.visualstudio.com/items?itemName=VisualStudioExptTeam.vscodeintellicode
-    "VisualStudioExptTeam.vscodeintellicode",
   ]
 }
