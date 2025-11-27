@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-
 // Reference:
 // https://qiita.com/mori_goq/items/5b01666cff5134f821bd
 
@@ -53,7 +51,8 @@ describe('verify asynchronous failure', () => {
 
     try {
       await fetchDataReject();
-    } catch (error: any) {
+    }
+    catch (error: any) {
       expect(error.message).toBe('something bad happened');
     }
   });
