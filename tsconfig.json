@@ -35,6 +35,9 @@
 
     // Specify type package names to be included without being referenced in a source file.
     "types": [
+      // TSC cannot find name of Global Object
+      // https://stackoverflow.com/a/45446470
+      "node",
       // https://vitest.dev/config/#globals
       "vitest/globals"
     ],
