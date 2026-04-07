@@ -1,14 +1,15 @@
 import eslint from '@eslint/js';
+import { defineConfig } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 import stylistic from '@stylistic/eslint-plugin';
 import globals from 'globals';
 
-export default tseslint.config(
+export default defineConfig(
   {
-    ignores: ['dist/**', 'node_modules/**', '.Trash-*/**', 'eslint.config.mjs'],
+    ignores: ['dist/**', 'eslint.config.mjs', '.Trash-*/**'],
   },
   eslint.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
+  tseslint.configs.recommendedTypeChecked,
   stylistic.configs.recommended,
   {
     languageOptions: {
@@ -16,7 +17,8 @@ export default tseslint.config(
         ...globals.node,
       },
       parserOptions: {
-        project: './tsconfig.json',
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
       },
     },
   },
