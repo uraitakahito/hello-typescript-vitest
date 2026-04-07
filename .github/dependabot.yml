@@ -1,0 +1,30 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    target-branch: "develop"
+    groups:
+      actions:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    target-branch: "develop"
+    versioning-strategy: increase
+    groups:
+      eslint:
+        patterns:
+          - "eslint"
+          - "@stylistic/eslint-plugin"
+          - "typescript-eslint"
+      typescript:
+        patterns:
+          - "typescript"
+          - "@types/node"
