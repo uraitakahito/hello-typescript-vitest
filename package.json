@@ -14,7 +14,7 @@
     "@stylistic/eslint-plugin": "^5.10.0",
     "@types/node": "^22.10.5",
     "eslint": "^10.2.0",
-    "globals": "^17.4.0",
+    "globals": "^17.5.0",
     "tinyexec": "^1.0.4",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.58.0",
