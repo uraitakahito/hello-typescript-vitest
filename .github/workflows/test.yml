@@ -19,4 +19,6 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run typecheck
+      - name: Install Chromium for the browser project
+        run: npx --no playwright install --with-deps --only-shell chromium
       - run: npm test
