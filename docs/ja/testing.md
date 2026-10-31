@@ -50,6 +50,17 @@ npx vitest --project unit --project browser
 
 `run` を付けないと、Vitest は終わらずに待ち、ファイルを保存するたびに、関係するテストを実行し直します。`h` でヘルプが出て、`q` で終わります。
 
+## ブラウザーの画面を見る
+
+`browser` プロジェクトは、ウィンドウを出さずに Chromium を動かします（`vitest.config.mts` の `headless: true`）。テストがアプリを操作する様子を見たいときは、これを外します。
+
+```sh
+npx vitest run --project browser --browser.headless=false   # テストが終わるとウィンドウが閉じる
+npx vitest --project browser --browser.headless=false       # ウィンドウが開いたまま待つ。q で終わる
+```
+
+開くのは Playwright が入れた Chromium で、「Google Chrome for Testing」という名前で表示されます。テストは 2 秒ほどで終わるので、終わったあとの画面を見るときは 2 つ目のコマンドを使います。どちらも Mac で実行してください。CI には、ウィンドウを出さない版の Chromium しか入れていません。
+
 ## 単体テスト
 
 単体テストは、Vitest の機能の小さな例です。
