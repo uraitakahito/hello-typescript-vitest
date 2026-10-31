@@ -8,7 +8,11 @@
     "typecheck": "tsc --noEmit",
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "vrt:server": "sh scripts/vrt-server.sh",
+    "vrt:server:stop": "sh scripts/vrt-server.sh stop",
+    "test:visual": "vitest run --project vrt",
+    "test:visual:update": "vitest run --project vrt --update"
   },
   "author": "",
   "license": "Unlicense",

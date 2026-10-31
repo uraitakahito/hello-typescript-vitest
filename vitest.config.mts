@@ -24,6 +24,31 @@ export default defineConfig({
           },
         },
       },
+      {
+        test: {
+          name: 'vrt',
+          include: ['test/vrt/**/*.vrt.test.ts'],
+          browser: {
+            enabled: true,
+            // Always use the pinned server (npm run vrt:server); never fall back to a local browser.
+            provider: playwright({
+              connectOptions: {
+                wsEndpoint: 'ws://127.0.0.1:6677/',
+                exposeNetwork: '<loopback>',
+              },
+            }),
+            headless: true,
+            instances: [{ browser: 'chromium', viewport: { width: 640, height: 480 } }],
+            expect: {
+              toMatchScreenshot: {
+                // The browser always runs in the container, so leave process.platform out of the name.
+                resolveScreenshotPath: ({ root, testFileDirectory, screenshotDirectory, testFileName, arg, browserName, ext }) =>
+                  `${root}/${testFileDirectory}/${screenshotDirectory}/${testFileName}/${arg}-${browserName}${ext}`,
+              },
+            },
+          },
+        },
+      },
     ],
   },
 });
