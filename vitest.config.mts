@@ -1,16 +1,54 @@
-/// <reference types="vitest/config" />
-// File names and extensions defined in the linked source are allowed as configuration files.
-// https://github.com/vitest-dev/vitest/blob/5d4b38282f095b2ab19883859569c6e26d7747a3/packages/vitest/src/constants.ts#L15-L19
-//
+import { defineConfig } from 'vitest/config';
+import { playwright } from '@vitest/browser-playwright';
 
-import { defineConfig } from 'vite';
-
-// https://vitejs.dev/config/
 export default defineConfig({
   test: {
-    // All global APIs are here:
-    // https://github.com/vitest-dev/vitest/blob/5d4b38282f095b2ab19883859569c6e26d7747a3/packages/vitest/src/constants.ts#L31-L54
     globals: true,
-    include: ['{test,test-vitest}/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
+    projects: [
+      {
+        test: {
+          name: 'unit',
+          include: ['test/unit/**/*.test.ts'],
+          environment: 'node',
+        },
+      },
+      {
+        test: {
+          name: 'browser',
+          include: ['test/browser/**/*.test.ts'],
+          browser: {
+            enabled: true,
+            provider: playwright(),
+            headless: true,
+            instances: [{ browser: 'chromium' }],
+          },
+        },
+      },
+      {
+        test: {
+          name: 'vrt',
+          include: ['test/vrt/**/*.vrt.test.ts'],
+          browser: {
+            enabled: true,
+            // Always use the pinned server (npm run vrt:server); never fall back to a local browser.
+            provider: playwright({
+              connectOptions: {
+                wsEndpoint: 'ws://127.0.0.1:6677/',
+                exposeNetwork: '<loopback>',
+              },
+            }),
+            headless: true,
+            instances: [{ browser: 'chromium', viewport: { width: 640, height: 480 } }],
+            expect: {
+              toMatchScreenshot: {
+                // The browser always runs in the container, so leave process.platform out of the name.
+                resolveScreenshotPath: ({ root, testFileDirectory, screenshotDirectory, testFileName, arg, browserName, ext }) =>
+                  `${root}/${testFileDirectory}/${screenshotDirectory}/${testFileName}/${arg}-${browserName}${ext}`,
+              },
+            },
+          },
+        },
+      },
+    ],
   },
 });

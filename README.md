@@ -11,5 +11,20 @@ chmod 755 docker-entrypoint.sh
 Detailed environment setup instructions are described at the beginning of the `Dockerfile`.
 
 ```console
-% vitest run test/sum.test.ts
+% vitest run test/unit/sum.test.ts
 ```
+
+## Visual regression tests
+
+Screenshots are taken by a Playwright server that runs in the pinned image written in `.playwright-image`, so every machine and CI produce the same pixels. Run these commands on the Mac host, where Apple Container is available.
+
+```console
+% npm run vrt:server          # start the Playwright server
+% npm run test:visual         # compare with the reference screenshots
+% npm run test:visual:update  # accept an intended UI change
+% npm run vrt:server:stop
+```
+
+When a comparison fails, the actual screenshot is written to `.vitest/attachments/`.
+
+To upgrade Playwright, update `playwright` in `package.json` and the tag and digest in `.playwright-image` in the same commit. `npm run vrt:server` refuses to start while they differ.

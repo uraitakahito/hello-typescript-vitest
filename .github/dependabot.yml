@@ -17,6 +17,15 @@ updates:
       day: "monday"
     versioning-strategy: increase
     groups:
+      # vitest and @vitest/* need the exact same version, so update them together, majors included.
+      vitest:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+      # Update .playwright-image in the same PR; npm run vrt:server fails until it matches.
+      playwright:
+        patterns:
+          - "playwright"
       dev-dependencies:
         patterns:
           - "*"
