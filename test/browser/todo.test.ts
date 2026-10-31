@@ -15,7 +15,7 @@ async function addTask(title: string): Promise<void> {
 test('タスクを追加すると一覧と残り件数に出る', async () => {
   await addTask('牛乳を買う');
 
-  await expect.element(page.getByRole('listitem')).toHaveTextContent('牛乳を買う');
+  await expect.element(page.getByRole('checkbox', { name: '牛乳を買う' })).toBeInTheDocument();
   await expect.element(page.getByRole('status')).toHaveTextContent('残り 1 件');
 });
 
@@ -23,7 +23,7 @@ test('前後の空白を除いた名前で追加する', async () => {
   await addTask('  牛乳を買う  ');
 
   // The default whitespace normalization would hide spaces that were not trimmed.
-  await expect.element(page.getByRole('listitem')).toHaveTextContent('牛乳を買う', { normalizeWhitespace: false });
+  await expect.element(page.getByText('牛乳を買う')).toHaveTextContent('牛乳を買う', { normalizeWhitespace: false });
 });
 
 test('空白だけの名前は追加しない', async () => {
@@ -60,5 +60,5 @@ test('同じストレージで描き直すとタスクが残っている', async
   // Browser Mode cannot reload the page, so mount again with the same storage.
   mountTodo(document.querySelector<HTMLElement>('#app')!, localStorage);
 
-  await expect.element(page.getByRole('listitem')).toHaveTextContent('牛乳を買う');
+  await expect.element(page.getByRole('checkbox', { name: '牛乳を買う' })).toBeInTheDocument();
 });
