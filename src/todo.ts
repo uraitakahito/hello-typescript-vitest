@@ -52,6 +52,10 @@ export function mountTodo(root: HTMLElement, storage: Storage): void {
     deleteButton.addEventListener('click', () => {
       todos.splice(index, 1);
       saveAndRender();
+      // Drawing again removes the pressed button. Keep keyboard users in place: the next
+      // task's 削除, else the one before it, else the input when the list is empty.
+      const buttons = list.querySelectorAll('button');
+      (buttons.item(Math.min(index, buttons.length - 1)) ?? input).focus();
     });
     const item = document.createElement('li');
     // The space keeps the same gap as between the input and 追加.

@@ -83,6 +83,29 @@ test('同じ名前のタスクは押したものだけを削除する', async ()
   await expect.element(page.getByRole('checkbox', { name: '牛乳を買う' })).not.toBeChecked();
 });
 
+test('削除したあとは次のタスクの削除ボタンにフォーカスが移る', async () => {
+  await addTask('牛乳を買う');
+  await addTask('パンを買う');
+  await userEvent.click(deleteButton('牛乳を買う'));
+
+  await expect.element(deleteButton('パンを買う')).toHaveFocus();
+});
+
+test('一覧の最後のタスクを削除すると前のタスクの削除ボタンにフォーカスが移る', async () => {
+  await addTask('牛乳を買う');
+  await addTask('パンを買う');
+  await userEvent.click(deleteButton('パンを買う'));
+
+  await expect.element(deleteButton('牛乳を買う')).toHaveFocus();
+});
+
+test('最後の 1 件を削除すると入力欄にフォーカスが移る', async () => {
+  await addTask('牛乳を買う');
+  await userEvent.click(deleteButton('牛乳を買う'));
+
+  await expect.element(page.getByLabelText('新しいタスク')).toHaveFocus();
+});
+
 test('同じストレージで描き直すとタスクが残っている', async () => {
   await addTask('牛乳を買う');
 
