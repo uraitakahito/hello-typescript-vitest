@@ -17,12 +17,18 @@ updates:
       day: "monday"
     versioning-strategy: increase
     groups:
-      eslint:
+      dev-dependencies:
         patterns:
-          - "eslint"
-          - "@stylistic/eslint-plugin"
-          - "typescript-eslint"
-      typescript:
-        patterns:
-          - "typescript"
-          - "@types/node"
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      # FIXME: typescript-eslint が TypeScript 6.1 以降に対応したら外す
+      - dependency-name: "typescript"
+        versions:
+          - ">=6.1.0"
+      # 実行環境が Node 24 のあいだは @types/node も 24 系にとどめる
+      - dependency-name: "@types/node"
+        versions:
+          - ">=25"

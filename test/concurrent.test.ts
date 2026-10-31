@@ -51,19 +51,20 @@ describe('concurrent suite', () => {
 });
 
 describe('sequential suite', () => {
-  it.sequential('a', async () => {
+  // Tests run one after another unless marked concurrent, so plain `it` is enough (Vitest 5 removed `it.sequential`).
+  it('a', async () => {
     await sleep(100);
     expect(1).toBe(1);
     console.log('sequential: test a complete.');
   });
 
-  it.sequential('b', async () => {
+  it('b', async () => {
     await sleep(100);
     expect(2).toBe(2);
     console.log('sequential: test b complete.');
   });
 
-  it.sequential('c', async () => {
+  it('c', async () => {
     await sleep(100);
     expect(3).toBe(3);
     console.log('sequential: test c complete.');

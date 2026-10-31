@@ -21,3 +21,5 @@ jobs:
           safe-chain setup-ci
       - name: Install dependencies
         run: npm ci --safe-chain-minimum-package-age-hours=48
+      - name: Audit dependencies
+        run: npm audit --audit-level=moderate
