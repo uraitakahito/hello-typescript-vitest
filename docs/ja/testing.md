@@ -6,13 +6,49 @@
 
 `vitest.config.mts` は 3 つのプロジェクトを定めています。
 
-| プロジェクト | ファイル | 動く場所 | コマンド |
+| プロジェクト | ファイル | 動く場所 | 先に要るもの |
 |---|---|---|---|
-| `unit` | `test/unit/**/*.test.ts` | Node | `npm test` |
-| `browser` | `test/browser/**/*.test.ts` | 手元の Chromium（画面なし） | `npm test` |
-| `vrt` | `test/vrt/**/*.vrt.test.ts` | 固定した Playwright のコンテナの中の Chromium | `npm run test:visual` |
+| `unit` | `test/unit/**/*.test.ts` | Node | なし |
+| `browser` | `test/browser/**/*.test.ts` | 手元の Chromium（画面なし） | 一度だけ `npx playwright install chromium`。[準備](setup.md)を参照 |
+| `vrt` | `test/vrt/**/*.vrt.test.ts` | 固定した Playwright のコンテナの中の Chromium | 動いている Playwright サーバー（`npm run vrt:server`）。[ビジュアルリグレッションテスト](visual-regression.md)を参照 |
 
-`npm test` は、`unit` と `browser` を、監視せずに 1 回だけ実行します。`vrt` は Playwright サーバーが要るので、別のコマンドで実行します。[ビジュアルリグレッションテスト](visual-regression.md)を見てください。
+## テストを実行する
+
+```sh
+npm test                           # unit と browser を 1 回実行する
+npx vitest run --project unit      # unit だけ
+npx vitest run --project browser   # browser だけ
+npm run vrt:server                 # vrt: Playwright サーバーを起動してから、
+npm run test:visual                # 基準画像と比べる
+```
+
+- `npm test` は、テストが出力するログを隠します（`--silent=true`）。`npx vitest run` のコマンドでは表示されます。
+- プロジェクトかファイルを必ず指定してください。何も指定しない `npx vitest run` や、`-t` だけを付けたものは `vrt` も実行し、Playwright サーバーが止まっていると `connect ECONNREFUSED 127.0.0.1:6677` ですぐに失敗します。
+- サーバーの止め方と基準画像の撮り直し方は、[ビジュアルリグレッションテスト](visual-regression.md)を見てください。
+
+## 1 つのファイルや 1 件だけを実行する
+
+`npm test --` の後ろに、ファイルか名前を付けます。探すのは `unit` と `browser` だけなので、Playwright サーバーは要りません。
+
+```sh
+npm test -- test/unit/sum.test.ts           # 1 つのファイル
+npm test -- test/browser/todo.test.ts
+npm test -- -t '削除すると一覧から消える'   # 名前が一致するテストだけ
+```
+
+`-t` には正規表現を書きます。一致しないテストは飛ばされます。テストが出力するログも見たいときは、プロジェクトを指定して `npx vitest run` を使います。
+
+```sh
+npx vitest run --project browser -t '削除すると一覧から消える'
+```
+
+## 保存するたびに実行し直す
+
+```sh
+npx vitest --project unit --project browser
+```
+
+`run` を付けないと、Vitest は終わらずに待ち、ファイルを保存するたびに、関係するテストを実行し直します。`h` でヘルプが出て、`q` で終わります。
 
 ## 単体テスト
 
@@ -23,14 +59,8 @@
 | `sum.test.ts` | `src/sum.ts` の素直なテスト |
 | `mock.test.ts` | `vi.fn`、`mock.calls` と `mock.results`、`vi.spyOn` |
 | `async.test.ts` | 成功する Promise と失敗する Promise のテスト。`.then`／`.catch`、`.resolves`／`.rejects`、`await`、`expect.assertions` を付けた `try`／`catch` |
-| `concurrent.test.ts` | `it.concurrent` と、ふつうに順番に動くテストの比較、フックの順番。順番はログにだけ出て、`npm test` は `--silent` でログを隠すので、見るときはこのファイルだけを実行する |
+| `concurrent.test.ts` | `it.concurrent` と、ふつうに順番に動くテストの比較、フックの順番。順番はログにだけ出るので、`npx vitest run test/unit/concurrent.test.ts` で実行する |
 | `domByDefineProperty.test.ts` | `Object.defineProperty` で `window.location` を差し替える |
-
-1 つのファイルだけを実行するには、次のようにします。
-
-```sh
-npx vitest run test/unit/sum.test.ts
-```
 
 ## ブラウザーのテスト
 
