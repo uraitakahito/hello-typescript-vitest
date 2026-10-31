@@ -44,8 +44,18 @@ export function mountTodo(root: HTMLElement, storage: Storage): void {
     });
     const label = document.createElement('label');
     label.append(checkbox, todo.title);
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.textContent = '削除';
+    // Every task has a 削除 button, so its name says which task it deletes.
+    deleteButton.setAttribute('aria-label', `「${todo.title}」を削除`);
+    deleteButton.addEventListener('click', () => {
+      todos.splice(index, 1);
+      saveAndRender();
+    });
     const item = document.createElement('li');
-    item.append(label);
+    // The space keeps the same gap as between the input and 追加.
+    item.append(label, ' ', deleteButton);
     return item;
   };
 
