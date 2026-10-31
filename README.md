@@ -11,5 +11,5 @@ chmod 755 docker-entrypoint.sh
 Detailed environment setup instructions are described at the beginning of the `Dockerfile`.
 
 ```console
-% vitest run test/sum.test.ts
+% vitest run test/unit/sum.test.ts
 ```
