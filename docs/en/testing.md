@@ -50,6 +50,17 @@ npx vitest --project unit --project browser
 
 Without `run`, Vitest keeps running and runs the affected tests again each time you save a file. Press `h` for help and `q` to quit.
 
+## Watch the browser
+
+The `browser` project runs Chromium without a window (`headless: true` in `vitest.config.mts`). To watch the tests drive the app, turn that off:
+
+```sh
+npx vitest run --project browser --browser.headless=false   # the window closes when the tests finish
+npx vitest --project browser --browser.headless=false       # the window stays open; press q to quit
+```
+
+The window is the Chromium that Playwright installed, and it shows up as "Google Chrome for Testing". The tests finish in a couple of seconds, so use the second command to look at the page after the run. Run these on your Mac; CI installs only the Chromium that has no window.
+
 ## Unit tests
 
 The unit tests are small examples of Vitest features.
