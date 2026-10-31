@@ -20,5 +20,9 @@
     "typescript-eslint": "^8.58.0",
     "vite": "^8.0.5",
     "vitest": "^4.1.12"
+  },
+  "//": "FIXME: ESLint 側が minimatch 11 系を受け付けたら overrides を消す（eslint/eslint#21463）",
+  "overrides": {
+    "minimatch": "^11.0.3"
   }
 }
