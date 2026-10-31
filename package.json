@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "vitest run --silent",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
   },
   "author": "",
   "license": "Unlicense",
@@ -12,14 +13,14 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@stylistic/eslint-plugin": "^5.10.0",
-    "@types/node": "^22.10.5",
-    "eslint": "^10.2.0",
-    "globals": "^17.4.0",
-    "tinyexec": "^1.0.4",
-    "typescript": "^5.7.2",
-    "typescript-eslint": "^8.58.0",
-    "vite": "^8.0.5",
-    "vitest": "^4.1.12"
+    "@types/node": "^24.19.2",
+    "eslint": "^10.13.0",
+    "globals": "^17.13.0",
+    "tinyexec": "^1.3.1",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.72.1",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
   },
   "//": "FIXME: ESLint 側が minimatch 11 系を受け付けたら overrides を消す（eslint/eslint#21463）",
   "overrides": {
