@@ -39,7 +39,9 @@
       // https://stackoverflow.com/a/45446470
       "node",
       // https://vitest.dev/config/#globals
-      "vitest/globals"
+      "vitest/globals",
+      // Types for CSS imports. TypeScript 6 checks side-effect imports by default.
+      "vite/client"
     ],
 
     // "allowUmdGlobalAccess": true,                     /* Allow accessing UMD globals from modules. */

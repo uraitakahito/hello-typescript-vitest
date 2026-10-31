@@ -1,0 +1,8 @@
+@import '@fontsource/noto-sans-jp/400.css';
+
+/* Form controls use the system font by default, so set the web font on them too. */
+body,
+button,
+input {
+  font-family: 'Noto Sans JP', sans-serif;
+}
