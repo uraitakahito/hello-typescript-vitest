@@ -6,13 +6,49 @@ English | [日本語](../ja/testing.md)
 
 `vitest.config.mts` defines three projects.
 
-| Project | Files | Runs in | Command |
+| Project | Files | Runs in | Needs |
 |---|---|---|---|
-| `unit` | `test/unit/**/*.test.ts` | Node | `npm test` |
-| `browser` | `test/browser/**/*.test.ts` | Chromium on your machine, headless | `npm test` |
-| `vrt` | `test/vrt/**/*.vrt.test.ts` | Chromium in the pinned Playwright container | `npm run test:visual` |
+| `unit` | `test/unit/**/*.test.ts` | Node | Nothing |
+| `browser` | `test/browser/**/*.test.ts` | Chromium on your machine, headless | `npx playwright install chromium`, once; see [Setup](setup.md) |
+| `vrt` | `test/vrt/**/*.vrt.test.ts` | Chromium in the pinned Playwright container | A running Playwright server (`npm run vrt:server`); see [Visual regression tests](visual-regression.md) |
 
-`npm test` runs `unit` and `browser` once, without watching. `vrt` needs the Playwright server, so it has its own commands; see [Visual regression tests](visual-regression.md).
+## Run the tests
+
+```sh
+npm test                           # unit and browser, once
+npx vitest run --project unit      # unit only
+npx vitest run --project browser   # browser only
+npm run vrt:server                 # vrt: start the Playwright server,
+npm run test:visual                # then compare with the reference screenshots
+```
+
+- `npm test` hides what the tests print (`--silent=true`). The `npx vitest run` commands show it.
+- Always name a project or a file. A plain `npx vitest run`, or one with only `-t`, runs `vrt` as well, which fails at once with `connect ECONNREFUSED 127.0.0.1:6677` while the Playwright server is stopped.
+- To stop the server or update the reference screenshots, see [Visual regression tests](visual-regression.md).
+
+## Run one file or one test
+
+Add a file or a name after `npm test --`. Only `unit` and `browser` are searched, so the Playwright server is not needed.
+
+```sh
+npm test -- test/unit/sum.test.ts           # one file
+npm test -- test/browser/todo.test.ts
+npm test -- -t '削除すると一覧から消える'   # only the tests whose name matches
+```
+
+`-t` takes a regular expression, and the tests that do not match are skipped. To see what the tests print as well, name the project and use `npx vitest run`:
+
+```sh
+npx vitest run --project browser -t '削除すると一覧から消える'
+```
+
+## Re-run on every change
+
+```sh
+npx vitest --project unit --project browser
+```
+
+Without `run`, Vitest keeps running and runs the affected tests again each time you save a file. Press `h` for help and `q` to quit.
 
 ## Unit tests
 
@@ -23,14 +59,8 @@ The unit tests are small examples of Vitest features.
 | `sum.test.ts` | a plain test of `src/sum.ts` |
 | `mock.test.ts` | `vi.fn`, `mock.calls` and `mock.results`, and `vi.spyOn` |
 | `async.test.ts` | testing a resolved and a rejected promise with `.then`/`.catch`, `.resolves`/`.rejects`, `await`, and `try`/`catch` with `expect.assertions` |
-| `concurrent.test.ts` | `it.concurrent` next to plain sequential tests, and the order of the hooks. The order shows only in the log, which `npm test` hides with `--silent`; run the file alone to see it. |
+| `concurrent.test.ts` | `it.concurrent` next to plain sequential tests, and the order of the hooks. The order shows only in the log, so run it with `npx vitest run test/unit/concurrent.test.ts`. |
 | `domByDefineProperty.test.ts` | replacing `window.location` with `Object.defineProperty` |
-
-To run one file:
-
-```sh
-npx vitest run test/unit/sum.test.ts
-```
 
 ## Browser tests
 
