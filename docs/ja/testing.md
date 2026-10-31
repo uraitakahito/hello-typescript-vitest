@@ -34,7 +34,7 @@ npx vitest run test/unit/sum.test.ts
 
 ## ブラウザーのテスト
 
-`test/browser/todo.test.ts` は、`vitest/browser` の `page` と `userEvent` で、[ToDo アプリ](todo-app.md)を Chromium の中で操作します。どのテストも、空にした `localStorage` でアプリを起動します。テスト全体で、追加、前後の空白、空白だけの名前と同じ名前、チェックの付け外し、同じ保存先でアプリを起動し直してもタスクが残ることを確かめています。Browser Mode はページを読み込み直せないので、起動し直すことで再読み込みの代わりにしています。
+`test/browser/todo.test.ts` は、`vitest/browser` の `page` と `userEvent` で、[ToDo アプリ](todo-app.md)を Chromium の中で操作します。どのテストも、空にした `localStorage` でアプリを起動します。テスト全体で、追加、前後の空白、空白だけの名前と同じ名前、チェックの付け外し、削除とそのあとのフォーカスの移り先、同じ保存先でアプリを起動し直したときに残るタスクを確かめています。Browser Mode はページを読み込み直せないので、起動し直すことで再読み込みの代わりにしています。
 
 ## 型と lint
 
