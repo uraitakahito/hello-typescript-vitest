@@ -8,7 +8,9 @@ hello-typescript-vitest is a sample project for testing TypeScript with Vitest. 
 
 - [Setup](setup.md) — Node, dependencies, the browser for the browser tests, and the development container
 - [ToDo app](todo-app.md) — the app that the browser and visual regression tests exercise: what it does and how to open it
+- [Testing](testing.md) — the three test projects, the sample unit tests, type checking and lint
 - [Visual regression tests](visual-regression.md) — the pinned Playwright server, running the tests, and reviewing the results
+- [Maintenance](maintenance.md) — CI, dependency updates and temporary settings
 
 ## Writing these docs
 
