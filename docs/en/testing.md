@@ -34,7 +34,7 @@ npx vitest run test/unit/sum.test.ts
 
 ## Browser tests
 
-`test/browser/todo.test.ts` drives the [ToDo app](todo-app.md) in Chromium with `page` and `userEvent` from `vitest/browser`. Each test mounts the app on a cleared `localStorage`. Together the tests cover adding a task, trimming, blank and duplicate titles, checking and unchecking, and keeping tasks when the app is mounted again on the same storage. Browser Mode cannot reload the page, so mounting again stands in for a reload.
+`test/browser/todo.test.ts` drives the [ToDo app](todo-app.md) in Chromium with `page` and `userEvent` from `vitest/browser`. Each test mounts the app on a cleared `localStorage`. Together the tests cover adding a task, trimming, blank and duplicate titles, checking and unchecking, deleting a task and where the focus goes afterwards, and what is left when the app is mounted again on the same storage. Browser Mode cannot reload the page, so mounting again stands in for a reload.
 
 ## Types and lint
 

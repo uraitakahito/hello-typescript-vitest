@@ -8,13 +8,14 @@ English | [日本語](../ja/todo-app.md)
 
 - Type a title and press 追加 (or Enter) to add a task to the end of the list. Spaces around the title are removed, a title of only spaces is ignored, and the same title can be added more than once. The browser itself stops an empty title, because the input is `required`.
 - Check a task to mark it done, and uncheck it to make it open again. The line under the list counts the open tasks (`残り N 件`). A done task looks the same apart from its check mark.
-- Tasks are saved in `localStorage` under the key `todos`, so they survive a reload. Tasks cannot be deleted, renamed or reordered.
+- Press 削除 next to a task to delete it. Only that task goes, even when another task has the same title. Focus then moves to the 削除 of the task that took its place, to the one before it when the deleted task was the last, or to the input when the list becomes empty.
+- Tasks are saved in `localStorage` under the key `todos`, so they survive a reload. Tasks cannot be renamed or reordered.
 
 ## How it works
 
 ```mermaid
 flowchart TB
-  page["Page (DOM)"] -- "add / check" --> todos["todos (array)"]
+  page["Page (DOM)"] -- "add / check / delete" --> todos["todos (array)"]
   todos -- "render" --> page
   todos -- "save" --> storage["localStorage: todos (JSON)"]
   storage -- "load when the page opens" --> todos

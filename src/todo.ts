@@ -23,22 +23,44 @@ export function mountTodo(root: HTMLElement, storage: Storage): void {
   const status = root.querySelector('p')!;
 
   const render = () => {
-    list.replaceChildren(...todos.map((todo, index) => {
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.checked = todo.done;
-      checkbox.addEventListener('change', () => {
-        todos[index] = { ...todo, done: checkbox.checked };
-        save(storage, todos);
-        render();
-      });
-      const label = document.createElement('label');
-      label.append(checkbox, todo.title);
-      const item = document.createElement('li');
-      item.append(label);
-      return item;
-    }));
+    list.replaceChildren(...todos.map(renderItem));
     status.textContent = `残り ${todos.filter(todo => !todo.done).length} 件`;
+  };
+
+  // Every change saves the whole list and draws it again. That is simpler than patching the
+  // DOM, and it keeps the index that renderItem binds to each task current.
+  const saveAndRender = () => {
+    save(storage, todos);
+    render();
+  };
+
+  const renderItem = (todo: Todo, index: number) => {
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = todo.done;
+    checkbox.addEventListener('change', () => {
+      todos[index] = { ...todo, done: checkbox.checked };
+      saveAndRender();
+    });
+    const label = document.createElement('label');
+    label.append(checkbox, todo.title);
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.textContent = '削除';
+    // Every task has a 削除 button, so its name says which task it deletes.
+    deleteButton.setAttribute('aria-label', `「${todo.title}」を削除`);
+    deleteButton.addEventListener('click', () => {
+      todos.splice(index, 1);
+      saveAndRender();
+      // Drawing again removes the pressed button. Keep keyboard users in place: the next
+      // task's 削除, else the one before it, else the input when the list is empty.
+      const buttons = list.querySelectorAll('button');
+      (buttons.item(Math.min(index, buttons.length - 1)) ?? input).focus();
+    });
+    const item = document.createElement('li');
+    // The space keeps the same gap as between the input and 追加.
+    item.append(label, ' ', deleteButton);
+    return item;
   };
 
   form.addEventListener('submit', (event) => {
@@ -48,9 +70,8 @@ export function mountTodo(root: HTMLElement, storage: Storage): void {
       return;
     }
     todos.push({ title, done: false });
-    save(storage, todos);
     input.value = '';
-    render();
+    saveAndRender();
   });
 
   render();
