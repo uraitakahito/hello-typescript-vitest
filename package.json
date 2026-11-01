@@ -20,8 +20,9 @@
     "preview": "`build` で作った dist/ を http://localhost:4173/ に配る。ポートが `dev` と違うので、localStorage に保存されたタスクも別になる。",
     "vrt:server": "VRT 用の Playwright サーバーを起動する（scripts/vrt-server.sh）。イメージは .playwright-image に書いた版で固定し、127.0.0.1:6677 だけで待ち受ける。手元は Apple Container、CI は CONTAINER_RUNTIME=docker で Docker を使う。npm の playwright とイメージの版が違うときは起動しない。すでに動いていれば何もしない。",
     "vrt:server:stop": "`vrt:server` で起動したコンテナ（vrt-playwright）を止める。--rm 付きで起動しているので、止めるとコンテナも消える。イメージは残る。",
-    "test:visual": "vrt プロジェクトを実行し、test/vrt/__screenshots__/ の基準画像と画素単位で比べる。先に `vrt:server` が要る（止まっていると ECONNREFUSED ですぐ失敗する）。違うときは、実際の画像と差分画像を .vitest/attachments/ に書き出す。",
-    "test:visual:update": "基準画像を撮り直す。書き換わるのは、違っていたものと、まだないものだけ。意図して見た目を変えたときだけ使い、PR で画像の差分を確かめる。`npm run test:visual --update` と書くと、--update は npm の設定として扱われて vitest に届かないので、別のスクリプトにしている。"
+    "test:visual": "vrt プロジェクトを実行し、test/vrt/__screenshots__/ の基準画像と画素単位で比べる。先に `vrt:server` が要る（止まっていると ECONNREFUSED ですぐ失敗する）。違うときは、実際の画像と差分画像を .vitest/attachments/ に書き出す。test/vrt/diff-demo.vrt.test.ts の「変えた後」は、わざと違えるテスト（test.fails）なので、毎回書き出す。",
+    "test:visual:ui": "`test:visual` を Vitest UI で開く（先に `vrt:server` が要る）。左の一覧でテストを選ぶと Report タブに結果が出て、比べて違ったときは Visual Regression で Diff・Reference・Actual・Slider を切り替えて見比べられる。diff-demo.vrt.test.ts の「変えた後」を選べば、いつでも差分を見られる。終わらずに待ち、ファイルを保存すると実行し直す。q で終わる。",
+    "test:visual:update": "基準画像を撮り直す。書き換わるのは、違っていたものと、まだないものだけ。意図して見た目を変えたときだけ使い、PR で画像の差分を確かめる。diff-demo.vrt.test.ts の「変えた後」は、変えたカードを基準画像にしないよう飛ばす。`npm run test:visual --update` と書くと、--update は npm の設定として扱われて vitest に届かないので、別のスクリプトにしている。"
   },
   "scripts": {
     "test": "vitest run --project unit --project browser --silent=true",
@@ -37,6 +38,7 @@
     "vrt:server": "sh scripts/vrt-server.sh",
     "vrt:server:stop": "sh scripts/vrt-server.sh stop",
     "test:visual": "vitest run --project vrt",
+    "test:visual:ui": "vitest --project vrt --ui",
     "test:visual:update": "vitest run --project vrt --update"
   },
   "author": "",

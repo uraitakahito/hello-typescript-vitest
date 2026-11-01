@@ -30,6 +30,7 @@ Each of these has a FIXME where it is set. Undo it once its condition holds.
 | `overrides.minimatch` in `package.json` | `eslint`, `@eslint/config-array` and `@typescript-eslint/typescript-estree` still ask for minimatch 10, which has advisory GHSA-g3hv-75wg-m249 | All three accept minimatch 11. Check each with `npm view <package> dependencies.minimatch`. |
 | `typescript: ~6.0.3`, and the Dependabot ignore of `>=6.1.0` | typescript-eslint accepts TypeScript below 6.1 only | typescript-eslint accepts 6.1. Go back to `^` and remove the ignore. |
 | `tinyexec` in `devDependencies` | Left over from an old version pin; nothing imports it | Any time |
+| `timeout: 1000` in `test/vrt/diff-demo.vrt.test.ts` | Vitest 5.0.5 never clears the timer that waits for a stable screenshot, so `vitest run` stays alive for the whole `timeout` (5 s by default) after any comparison that is not byte-identical to its reference. The demo makes such comparisons on every run. | Vitest clears the timer (`waitForStableScreenshot` in `@vitest/browser`). Remove the option and check that `npm run test:visual` still finishes in about 3 s, not 7 s. |
 
 ## Comments in package.json
 
