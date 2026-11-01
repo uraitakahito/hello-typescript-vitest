@@ -10,20 +10,20 @@
 |---|---|---|---|
 | `unit` | `test/unit/**/*.test.ts` | Node | なし |
 | `browser` | `test/browser/**/*.test.ts` | 手元の Chromium（画面なし） | 一度だけ `npx playwright install chromium`。[準備](setup.md)を参照 |
-| `vrt` | `test/vrt/**/*.vrt.test.ts` | 固定した Playwright のコンテナの中の Chromium | 動いている Playwright サーバー（`npm run vrt:server`）。[ビジュアルリグレッションテスト](visual-regression.md)を参照 |
+| `visual-regression` | `test/visual-regression/**/*.test.ts` | 固定した Playwright のコンテナの中の Chromium | 動いている Playwright サーバー（`npm run visual-regression:server`）。[ビジュアルリグレッションテスト](visual-regression.md)を参照 |
 
 ## テストを実行する
 
 ```sh
-npm test               # unit と browser を 1 回実行する
-npm run test:unit      # unit だけ
-npm run test:browser   # browser だけ
-npm run vrt:server     # vrt: Playwright サーバーを起動してから、
-npm run test:visual    # 基準画像と比べる
+npm test                           # unit と browser を 1 回実行する
+npm run test:unit                  # unit だけ
+npm run test:browser               # browser だけ
+npm run visual-regression:server   # visual-regression: Playwright サーバーを起動してから、
+npm run test:visual-regression     # 基準画像と比べる
 ```
 
 - `npm test` は、テストが出力するログを隠します（`--silent=true`）。`npm run test:unit` と `npm run test:browser` では表示されます。
-- プロジェクトかファイルを必ず指定してください。何も指定しない `npx vitest run` や、`-t` だけを付けたものは `vrt` も実行し、Playwright サーバーが止まっていると `connect ECONNREFUSED 127.0.0.1:6677` ですぐに失敗します。
+- プロジェクトかファイルを必ず指定してください。何も指定しない `npx vitest run` や、`-t` だけを付けたものは `visual-regression` も実行し、Playwright サーバーが止まっていると `connect ECONNREFUSED 127.0.0.1:6677` ですぐに失敗します。
 - サーバーの止め方と基準画像の撮り直し方は、[ビジュアルリグレッションテスト](visual-regression.md)を見てください。
 - 比べて違ったときの画像は、Vitest UI を使うとブラウザーで見られます。下の「画像と差分を Vitest UI で見る」を見てください。
 
@@ -64,20 +64,20 @@ npx vitest run --project browser --browser.headless=false   # テストが終わ
 
 ## 画像と差分を Vitest UI で見る
 
-`npm run test:visual` は、比べた結果が合っていたかどうかを端末に出すだけです。Vitest UI を使うと、実行の結果をブラウザーで見られ、比べて違ったときは画像も見られます。
+`npm run test:visual-regression` は、比べた結果が合っていたかどうかを端末に出すだけです。Vitest UI を使うと、実行の結果をブラウザーで見られ、比べて違ったときは画像も見られます。
 
 ```sh
-npm run vrt:server        # vrt プロジェクトは Playwright サーバーが要る
-npm run test:visual:ui    # ブラウザーで Vitest UI が開く。q で終わる
+npm run visual-regression:server   # visual-regression プロジェクトは Playwright サーバーが要る
+npm run test:visual-regression:ui  # ブラウザーで Vitest UI が開く。q で終わる
 ```
 
 - Vitest UI は、端末に `UI started at http://localhost:51204/__vitest__/?token=…` と出るアドレスで開きます。token もアドレスの一部なので、表示されたものを使ってください。
 - 左の一覧でテストを選ぶと、Report タブに結果が出ます。
 - 比べて違ったときは、Report タブの Test Artifacts に Visual Regression の枠が出て、4 つのタブで画像を見られます。Diff は差分画像（違う画素が赤）、Reference は基準画像、Actual は今回のスクリーンショットです。Slider では、境目を動かして Reference と Actual を比べられます。
-- 合っていたときは「The test has passed without any errors」と出るだけで、画像は出ません。基準画像は `test/vrt/__screenshots__/` にあります。
-- 何も壊さずに、比べて違ったときの画面を見たいときは、`diff-demo.vrt.test.ts` の「変えた後」のテストを選びます。どれも見本のカードをわざと 1 か所変え、比べて違うのが正しいテスト（`test.fails`）なので、成功のまま Visual Regression の枠が出ます。[ビジュアルリグレッションテスト](visual-regression.md)も見てください。
+- 合っていたときは「The test has passed without any errors」と出るだけで、画像は出ません。基準画像は `test/visual-regression/__screenshots__/` にあります。
+- 何も壊さずに、比べて違ったときの画面を見たいときは、`diff-demo.test.ts` の「変えた後」のテストを選びます。どれも見本のカードをわざと 1 か所変え、比べて違うのが正しいテスト（`test.fails`）なので、成功のまま Visual Regression の枠が出ます。[ビジュアルリグレッションテスト](visual-regression.md)も見てください。
 - Vitest は終わらずに待ち、ファイルを保存するたびにテストを実行し直します。CSS を変えて、結果が変わるのを見られます。
-- `@vitest/ui` は `@vitest/browser-playwright` と一緒に入るので、足すものはありません。記録した DOM の動きも追いたいときは、`npm run test:visual:ui -- --browser.traceView` で起動します。これを含め、結果のほかの見方は[ビジュアルリグレッションテスト](visual-regression.md)にあります。
+- `@vitest/ui` は `@vitest/browser-playwright` と一緒に入るので、足すものはありません。記録した DOM の動きも追いたいときは、`npm run test:visual-regression:ui -- --browser.traceView` で起動します。これを含め、結果のほかの見方は[ビジュアルリグレッションテスト](visual-regression.md)にあります。
 
 ## 単体テスト
 

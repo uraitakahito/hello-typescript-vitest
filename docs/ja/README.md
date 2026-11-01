@@ -7,7 +7,7 @@ hello-typescript-vitest は、Vitest で TypeScript をテストするサンプ�
 ## ページ
 
 - [準備](setup.md) — Node、依存、ブラウザーのテストに使うブラウザー、開発用コンテナ
-- [ToDo アプリ](todo-app.md) — ブラウザーのテストと VRT が相手にするアプリ。何ができるかと、開き方
+- [ToDo アプリ](todo-app.md) — ブラウザーのテストとビジュアルリグレッションテストが相手にするアプリ。何ができるかと、開き方
 - [テスト](testing.md) — 3 つのテストのプロジェクトと、それぞれを実行するコマンド、1 つのファイルや 1 件だけの実行、サンプルの単体テスト、型の検査と lint
 - [ビジュアルリグレッションテスト](visual-regression.md) — 固定した Playwright サーバー、テストの実行、結果の見方
 - [保守](maintenance.md) — CI、依存の更新、一時的な設定

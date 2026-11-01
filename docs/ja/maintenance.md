@@ -7,7 +7,7 @@
 | ワークフロー | ジョブ | 動くとき | すること |
 |---|---|---|---|
 | `test.yml` | Test | `main` への PR と push | `npm ci`、`npm run typecheck`、`npm run lint:docs`、Chromium の headless shell のインストール、`npm test` |
-| `test.yml` | Visual | `main` への PR と push | Docker で Playwright サーバーを起動し、`npm run test:visual` を実行する。失敗したら `vrt-attachments` をアップロードする |
+| `test.yml` | Visual regression | `main` への PR と push | Docker で Playwright サーバーを起動し、`npm run test:visual-regression` を実行する。失敗したら `visual-regression-attachments` をアップロードする |
 | `reviewdog.yml` | ESLint | `main` への PR | ESLint を実行し、結果をレビューのコメントにする |
 | `safe-chain.yml` | Security Scan | `main` への PR | safe-chain 経由の `npm ci`（公開から 48 時間以上たった版だけ）のあと、`npm audit --audit-level=moderate` |
 
@@ -30,7 +30,7 @@ Dependabot が `playwright` を上げたときは、同じ PR で `.playwright-i
 | `package.json` の `overrides.minimatch` | `eslint`、`@eslint/config-array`、`@typescript-eslint/typescript-estree` がまだ minimatch 10 系を求めていて、その版には脆弱性 GHSA-g3hv-75wg-m249 がある | 3 つとも minimatch 11 系を受け付けたとき。それぞれ `npm view <パッケージ> dependencies.minimatch` で確かめる |
 | `typescript: ~6.0.3` と、Dependabot の `>=6.1.0` の除外 | typescript-eslint が 6.1 より前の TypeScript しか受け付けない | typescript-eslint が 6.1 に対応したとき。`^` に戻し、除外も外す |
 | `devDependencies` の `tinyexec` | 以前の版の固定の名残で、どこからも使っていない | いつでも |
-| `test/vrt/diff-demo.vrt.test.ts` の `timeout: 1000` | Vitest 5.0.5 は、スクリーンショットが落ち着くのを待つタイマーを消さない。そのため、基準画像とバイト単位で同じでない比較のあと、`vitest run` が `timeout` の時間（既定 5 秒）だけ終わらない。デモは、毎回そういう比較をする | Vitest がタイマーを消すようになったとき（`@vitest/browser` の `waitForStableScreenshot`）。設定を外して、`npm run test:visual` が 7 秒ではなく 3 秒ほどで終わることを確かめる |
+| `test/visual-regression/diff-demo.test.ts` の `timeout: 1000` | Vitest 5.0.5 は、スクリーンショットが落ち着くのを待つタイマーを消さない。そのため、基準画像とバイト単位で同じでない比較のあと、`vitest run` が `timeout` の時間（既定 5 秒）だけ終わらない。デモは、毎回そういう比較をする | Vitest がタイマーを消すようになったとき（`@vitest/browser` の `waitForStableScreenshot`）。設定を外して、`npm run test:visual-regression` が 7 秒ではなく 3 秒ほどで終わることを確かめる |
 
 ## package.json のコメント
 
