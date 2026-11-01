@@ -1,11 +1,11 @@
 #!/bin/sh
-# Start or stop the pinned Playwright server that the vrt project connects to.
+# Start or stop the pinned Playwright server that the visual-regression project connects to.
 # Uses Apple Container locally; CI runners set CONTAINER_RUNTIME=docker.
 set -eu
 cd "$(dirname "$0")/.."
 
 runtime=${CONTAINER_RUNTIME:-container}
-name=vrt-playwright
+name=visual-regression-playwright
 
 if [ "${1:-start}" = stop ]; then
   exec "$runtime" stop "$name"
