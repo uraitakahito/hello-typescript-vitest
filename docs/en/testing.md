@@ -10,20 +10,20 @@ English | [日本語](../ja/testing.md)
 |---|---|---|---|
 | `unit` | `test/unit/**/*.test.ts` | Node | Nothing |
 | `browser` | `test/browser/**/*.test.ts` | Chromium on your machine, headless | `npx playwright install chromium`, once; see [Setup](setup.md) |
-| `vrt` | `test/vrt/**/*.vrt.test.ts` | Chromium in the pinned Playwright container | A running Playwright server (`npm run vrt:server`); see [Visual regression tests](visual-regression.md) |
+| `visual-regression` | `test/visual-regression/**/*.test.ts` | Chromium in the pinned Playwright container | A running Playwright server (`npm run visual-regression:server`); see [Visual regression tests](visual-regression.md) |
 
 ## Run the tests
 
 ```sh
-npm test               # unit and browser, once
-npm run test:unit      # unit only
-npm run test:browser   # browser only
-npm run vrt:server     # vrt: start the Playwright server,
-npm run test:visual    # then compare with the reference screenshots
+npm test                           # unit and browser, once
+npm run test:unit                  # unit only
+npm run test:browser               # browser only
+npm run visual-regression:server   # visual-regression: start the Playwright server,
+npm run test:visual-regression     # then compare with the reference screenshots
 ```
 
 - `npm test` hides what the tests print (`--silent=true`). `npm run test:unit` and `npm run test:browser` show it.
-- Always name a project or a file. A plain `npx vitest run`, or one with only `-t`, runs `vrt` as well, which fails at once with `connect ECONNREFUSED 127.0.0.1:6677` while the Playwright server is stopped.
+- Always name a project or a file. A plain `npx vitest run`, or one with only `-t`, runs `visual-regression` as well, which fails at once with `connect ECONNREFUSED 127.0.0.1:6677` while the Playwright server is stopped.
 - To stop the server or update the reference screenshots, see [Visual regression tests](visual-regression.md).
 - To see the images of a failed comparison in your browser, use Vitest UI. See "See the screenshots in Vitest UI" below.
 
@@ -64,20 +64,20 @@ The window is the Chromium that Playwright installed, and it shows up as "Google
 
 ## See the screenshots in Vitest UI
 
-`npm run test:visual` only reports in the terminal whether each comparison passed. Vitest UI shows the run in your browser, and for a failed comparison it shows the images too.
+`npm run test:visual-regression` only reports in the terminal whether each comparison passed. Vitest UI shows the run in your browser, and for a failed comparison it shows the images too.
 
 ```sh
-npm run vrt:server        # the vrt project needs the Playwright server
-npm run test:visual:ui    # opens Vitest UI in your browser; press q to quit
+npm run visual-regression:server   # the visual-regression project needs the Playwright server
+npm run test:visual-regression:ui  # opens Vitest UI in your browser; press q to quit
 ```
 
 - Vitest UI opens at the address that the terminal prints as `UI started at http://localhost:51204/__vitest__/?token=…`. The token is part of the address, so use the printed one.
 - Click a test in the list on the left. Its Report tab shows the result.
 - When a comparison fails, the Report tab shows a Visual Regression box under Test Artifacts, with four tabs: Diff (the diff image, where differing pixels are red), Reference (the reference screenshot), Actual (the new screenshot) and Slider (drag the divider to compare Reference and Actual).
-- When a comparison passes, the Report tab only says "The test has passed without any errors" and shows no images. The reference screenshots are in `test/vrt/__screenshots__/`.
-- To see a failed comparison without breaking anything, click a test under `変えた後` in `diff-demo.vrt.test.ts`. Each one changes a sample card on purpose and is expected to fail its comparison (`test.fails`), so it passes and still shows the Visual Regression box. See [Visual regression tests](visual-regression.md).
+- When a comparison passes, the Report tab only says "The test has passed without any errors" and shows no images. The reference screenshots are in `test/visual-regression/__screenshots__/`.
+- To see a failed comparison without breaking anything, click a test under `変えた後` in `diff-demo.test.ts`. Each one changes a sample card on purpose and is expected to fail its comparison (`test.fails`), so it passes and still shows the Visual Regression box. See [Visual regression tests](visual-regression.md).
 - Vitest keeps running and runs the tests again each time you save a file, so you can change the CSS and watch the result change.
-- `@vitest/ui` comes with `@vitest/browser-playwright`, so there is nothing to install. To step through the recorded DOM as well, run `npm run test:visual:ui -- --browser.traceView`. That and the other ways to review the results are in [Visual regression tests](visual-regression.md).
+- `@vitest/ui` comes with `@vitest/browser-playwright`, so there is nothing to install. To step through the recorded DOM as well, run `npm run test:visual-regression:ui -- --browser.traceView`. That and the other ways to review the results are in [Visual regression tests](visual-regression.md).
 
 ## Unit tests
 

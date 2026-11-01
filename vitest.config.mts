@@ -26,11 +26,11 @@ export default defineConfig({
       },
       {
         test: {
-          name: 'vrt',
-          include: ['test/vrt/**/*.vrt.test.ts'],
+          name: 'visual-regression',
+          include: ['test/visual-regression/**/*.test.ts'],
           browser: {
             enabled: true,
-            // Always use the pinned server (npm run vrt:server); never fall back to a local browser.
+            // Always use the pinned server (npm run visual-regression:server); never fall back to a local browser.
             provider: playwright({
               connectOptions: {
                 wsEndpoint: 'ws://127.0.0.1:6677/',

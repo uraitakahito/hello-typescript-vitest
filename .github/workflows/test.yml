@@ -24,8 +24,8 @@ jobs:
         run: npx --no playwright install --with-deps --only-shell chromium
       - run: npm test
 
-  visual:
-    name: Visual
+  visual-regression:
+    name: Visual regression
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -37,13 +37,13 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - name: Start the pinned Playwright server
-        run: npm run vrt:server
+        run: npm run visual-regression:server
         env:
           CONTAINER_RUNTIME: docker
-      - run: npm run test:visual
+      - run: npm run test:visual-regression
       - name: Upload actual screenshots
         if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: vrt-attachments
+          name: visual-regression-attachments
           path: .vitest/attachments
