@@ -9,6 +9,9 @@
   "main": "index.js",
   "//scripts": {
     "test": "unit と browser の 2 つのプロジェクトを、監視せずに 1 回だけ実行する（設定は vitest.config.mts）。browser は手元の Playwright の Chromium で動くので、初めてのときは `npx playwright install chromium` が要る。vrt プロジェクトは Playwright のサーバーが要るので含めない（`test:visual` を使う）。`--silent=true` はテストの中の console 出力を隠す。値まで書くのは、`npm test -- test/unit/sum.test.ts` のように後ろに足したファイル名を、--silent の値として読ませないため（`--silent` だけだと Unexpected value で止まる）。",
+    "test:unit": "unit プロジェクトだけを、監視せずに 1 回だけ実行する。Node で動くので、準備は要らない。`test` と違い、テストの中の console 出力を隠さない（concurrent.test.ts のフックの順番は、ログにしか出ない）。`npm run test:unit -- test/unit/sum.test.ts` のように、後ろにファイル名や `-t` を足せる。",
+    "test:browser": "browser プロジェクトだけを、監視せずに 1 回だけ実行する。手元の Playwright の Chromium をウィンドウなしで動かすので、初めてのときは `npx playwright install chromium` が要る。`test` と違い、console 出力を隠さない。",
+    "test:browser:headed": "browser プロジェクトを、Chromium のウィンドウを出して実行する（`--browser.headless=false` が vitest.config.mts の `headless: true` より優先される）。テストは 2 秒ほどで終わるので、`run` を付けずに監視モードで動かし、終わったあともウィンドウを開いたままにする。ファイルを保存すると実行し直し、`q` で終わる。手元の Mac で使うもので、CI にはウィンドウを出す Chromium を入れていない。",
     "lint": "ESLint でリポジトリ全体を検査し（設定は eslint.config.mjs）、続けて `lint:docs` を実行する。CI では ESLint を reviewdog の ESLint ジョブが、ドキュメントの検査を test ジョブが受け持つ。",
     "lint:docs": "docs/en と docs/ja の食い違いを探す（scripts/check-docs.mts）。相手のいないページ、1 行目が言語の切り替えリンクでないページ、見出しのレベルやコードブロックの言語の並びが相手と違うページ、README とドキュメントの切れた相対リンクで失敗する。文章そのものは比べない。",
     "typecheck": "tsc で型だけを検査し、何も書き出さない（設定は tsconfig.json）。vite build も vitest も型を検査しないので、型の誤りはこれで見つける。CI の test ジョブも、テストの前に実行する。",
@@ -22,6 +25,9 @@
   },
   "scripts": {
     "test": "vitest run --project unit --project browser --silent=true",
+    "test:unit": "vitest run --project unit",
+    "test:browser": "vitest run --project browser",
+    "test:browser:headed": "vitest --project browser --browser.headless=false",
     "lint": "eslint . && npm run lint:docs",
     "lint:docs": "node scripts/check-docs.mts",
     "typecheck": "tsc --noEmit",
