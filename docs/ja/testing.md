@@ -25,6 +25,7 @@ npm run test:visual    # 基準画像と比べる
 - `npm test` は、テストが出力するログを隠します（`--silent=true`）。`npm run test:unit` と `npm run test:browser` では表示されます。
 - プロジェクトかファイルを必ず指定してください。何も指定しない `npx vitest run` や、`-t` だけを付けたものは `vrt` も実行し、Playwright サーバーが止まっていると `connect ECONNREFUSED 127.0.0.1:6677` ですぐに失敗します。
 - サーバーの止め方と基準画像の撮り直し方は、[ビジュアルリグレッションテスト](visual-regression.md)を見てください。
+- 比べて違ったときの画像は、Vitest UI を使うとブラウザーで見られます。下の「画像と差分を Vitest UI で見る」を見てください。
 
 ## 1 つのファイルや 1 件だけを実行する
 
@@ -60,6 +61,22 @@ npx vitest run --project browser --browser.headless=false   # テストが終わ
 ```
 
 開くのは Playwright が入れた Chromium で、「Google Chrome for Testing」という名前で表示されます。テストは 2 秒ほどで終わるので、`npm run test:browser:headed` は Vitest を終わらせずに待たせます。終わったあともウィンドウが開いたままなので画面を見られ、ファイルを保存すると実行し直します。どちらも Mac で実行してください。CI には、ウィンドウを出さない版の Chromium しか入れていません。
+
+## 画像と差分を Vitest UI で見る
+
+`npm run test:visual` は、比べた結果が合っていたかどうかを端末に出すだけです。Vitest UI を使うと、実行の結果をブラウザーで見られ、比べて違ったときは画像も見られます。
+
+```sh
+npm run vrt:server              # vrt プロジェクトは Playwright サーバーが要る
+npx vitest --project vrt --ui   # ブラウザーで Vitest UI が開く。q で終わる
+```
+
+- Vitest UI は、端末に `UI started at http://localhost:51204/__vitest__/?token=…` と出るアドレスで開きます。token もアドレスの一部なので、表示されたものを使ってください。
+- 左の一覧でテスト（`ToDo の見た目`）を選ぶと、Report タブに結果が出ます。
+- 比べて違ったときは、Report タブの Test Artifacts に Visual Regression の枠が出て、4 つのタブで画像を見られます。Diff は差分画像（違う画素が赤）、Reference は基準画像、Actual は今回のスクリーンショットです。Slider では、境目を動かして Reference と Actual を比べられます。
+- 合っていたときは「The test has passed without any errors」と出るだけで、画像は出ません。基準画像は `test/vrt/__screenshots__/` にあります。
+- Vitest は終わらずに待ち、ファイルを保存するたびにテストを実行し直します。CSS を変えて、結果が変わるのを見られます。
+- `@vitest/ui` は `@vitest/browser-playwright` と一緒に入るので、足すものはありません。記録した DOM の動きも追いたいときは、`--browser.traceView` を付けます。これを含め、結果のほかの見方は[ビジュアルリグレッションテスト](visual-regression.md)にあります。
 
 ## 単体テスト
 
