@@ -26,8 +26,8 @@ export default defineConfig({
       },
       {
         test: {
-          name: 'vrt',
-          include: ['test/vrt/**/*.vrt.test.ts'],
+          name: 'visual-regression',
+          include: ['test/visual-regression/**/*.test.ts'],
           browser: {
             enabled: true,
             // Always use the pinned server (npm run vrt:server); never fall back to a local browser.

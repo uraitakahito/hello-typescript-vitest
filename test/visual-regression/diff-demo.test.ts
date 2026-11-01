@@ -1,10 +1,10 @@
 import { page, server } from 'vitest/browser';
 import '@fontsource/noto-sans-jp/400.css';
 
-// A demo of failed comparisons that keeps `npm run test:visual` green. Each case takes a small card,
+// A demo of failed comparisons that keeps `npm run test:visual-regression` green. Each case takes a small card,
 // which has nothing to do with the ToDo app, and compares it with its reference twice: as it is ("変える前"),
 // which must match, and with one change ("変えた後"), which must not, so those tests are `test.fails`.
-// Open a "変えた後" test in Vitest UI (npm run test:visual:ui) to see the Diff, Reference, Actual and Slider tabs.
+// Open a "変えた後" test in Vitest UI (npm run test:visual-regression:ui) to see the Diff, Reference, Actual and Slider tabs.
 
 const cardCss = `
   .card {
@@ -73,7 +73,7 @@ describe('変える前', () => {
   });
 });
 
-// `--update` (npm run test:visual:update) saves every screenshot that does not match as the new reference,
+// `--update` (npm run test:visual-regression:update) saves every screenshot that does not match as the new reference,
 // so the changed cards would replace the references. Skip them then; "変える前" keeps the references current.
 describe.skipIf(server.config.snapshotOptions.updateSnapshot === 'all')('変えた後', () => {
   test.fails.for(cases)('$name', async ({ reference, changedCss }) => {

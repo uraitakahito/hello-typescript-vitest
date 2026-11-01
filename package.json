@@ -8,7 +8,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "//scripts": {
-    "test": "unit と browser の 2 つのプロジェクトを、監視せずに 1 回だけ実行する（設定は vitest.config.mts）。browser は手元の Playwright の Chromium で動くので、初めてのときは `npx playwright install chromium` が要る。vrt プロジェクトは Playwright のサーバーが要るので含めない（`test:visual` を使う）。`--silent=true` はテストの中の console 出力を隠す。値まで書くのは、`npm test -- test/unit/sum.test.ts` のように後ろに足したファイル名を、--silent の値として読ませないため（`--silent` だけだと Unexpected value で止まる）。",
+    "test": "unit と browser の 2 つのプロジェクトを、監視せずに 1 回だけ実行する（設定は vitest.config.mts）。browser は手元の Playwright の Chromium で動くので、初めてのときは `npx playwright install chromium` が要る。visual-regression プロジェクトは Playwright のサーバーが要るので含めない（`test:visual-regression` を使う）。`--silent=true` はテストの中の console 出力を隠す。値まで書くのは、`npm test -- test/unit/sum.test.ts` のように後ろに足したファイル名を、--silent の値として読ませないため（`--silent` だけだと Unexpected value で止まる）。",
     "test:unit": "unit プロジェクトだけを、監視せずに 1 回だけ実行する。Node で動くので、準備は要らない。`test` と違い、テストの中の console 出力を隠さない（concurrent.test.ts のフックの順番は、ログにしか出ない）。`npm run test:unit -- test/unit/sum.test.ts` のように、後ろにファイル名や `-t` を足せる。",
     "test:browser": "browser プロジェクトだけを、監視せずに 1 回だけ実行する。手元の Playwright の Chromium をウィンドウなしで動かすので、初めてのときは `npx playwright install chromium` が要る。`test` と違い、console 出力を隠さない。",
     "test:browser:headed": "browser プロジェクトを、Chromium のウィンドウを出して実行する（`--browser.headless=false` が vitest.config.mts の `headless: true` より優先される）。テストは 2 秒ほどで終わるので、`run` を付けずに監視モードで動かし、終わったあともウィンドウを開いたままにする。ファイルを保存すると実行し直し、`q` で終わる。手元の Mac で使うもので、CI にはウィンドウを出す Chromium を入れていない。",
@@ -20,9 +20,9 @@
     "preview": "`build` で作った dist/ を http://localhost:4173/ に配る。ポートが `dev` と違うので、localStorage に保存されたタスクも別になる。",
     "vrt:server": "VRT 用の Playwright サーバーを起動する（scripts/vrt-server.sh）。イメージは .playwright-image に書いた版で固定し、127.0.0.1:6677 だけで待ち受ける。手元は Apple Container、CI は CONTAINER_RUNTIME=docker で Docker を使う。npm の playwright とイメージの版が違うときは起動しない。すでに動いていれば何もしない。",
     "vrt:server:stop": "`vrt:server` で起動したコンテナ（vrt-playwright）を止める。--rm 付きで起動しているので、止めるとコンテナも消える。イメージは残る。",
-    "test:visual": "vrt プロジェクトを実行し、test/vrt/__screenshots__/ の基準画像と画素単位で比べる。先に `vrt:server` が要る（止まっていると ECONNREFUSED ですぐ失敗する）。違うときは、実際の画像と差分画像を .vitest/attachments/ に書き出す。test/vrt/diff-demo.vrt.test.ts の「変えた後」は、わざと違えるテスト（test.fails）なので、毎回書き出す。",
-    "test:visual:ui": "`test:visual` を Vitest UI で開く（先に `vrt:server` が要る）。左の一覧でテストを選ぶと Report タブに結果が出て、比べて違ったときは Visual Regression で Diff・Reference・Actual・Slider を切り替えて見比べられる。diff-demo.vrt.test.ts の「変えた後」を選べば、いつでも差分を見られる。終わらずに待ち、ファイルを保存すると実行し直す。q で終わる。",
-    "test:visual:update": "基準画像を撮り直す。書き換わるのは、違っていたものと、まだないものだけ。意図して見た目を変えたときだけ使い、PR で画像の差分を確かめる。diff-demo.vrt.test.ts の「変えた後」は、変えたカードを基準画像にしないよう飛ばす。`npm run test:visual --update` と書くと、--update は npm の設定として扱われて vitest に届かないので、別のスクリプトにしている。"
+    "test:visual-regression": "visual-regression プロジェクトを実行し、test/visual-regression/__screenshots__/ の基準画像と画素単位で比べる。先に `vrt:server` が要る（止まっていると ECONNREFUSED ですぐ失敗する）。違うときは、実際の画像と差分画像を .vitest/attachments/ に書き出す。test/visual-regression/diff-demo.test.ts の「変えた後」は、わざと違えるテスト（test.fails）なので、毎回書き出す。",
+    "test:visual-regression:ui": "`test:visual-regression` を Vitest UI で開く（先に `vrt:server` が要る）。左の一覧でテストを選ぶと Report タブに結果が出て、比べて違ったときは Visual Regression で Diff・Reference・Actual・Slider を切り替えて見比べられる。diff-demo.test.ts の「変えた後」を選べば、いつでも差分を見られる。終わらずに待ち、ファイルを保存すると実行し直す。q で終わる。",
+    "test:visual-regression:update": "基準画像を撮り直す。書き換わるのは、違っていたものと、まだないものだけ。意図して見た目を変えたときだけ使い、PR で画像の差分を確かめる。diff-demo.test.ts の「変えた後」は、変えたカードを基準画像にしないよう飛ばす。`npm run test:visual-regression --update` と書くと、--update は npm の設定として扱われて vitest に届かないので、別のスクリプトにしている。"
   },
   "scripts": {
     "test": "vitest run --project unit --project browser --silent=true",
@@ -37,17 +37,17 @@
     "preview": "vite preview",
     "vrt:server": "sh scripts/vrt-server.sh",
     "vrt:server:stop": "sh scripts/vrt-server.sh stop",
-    "test:visual": "vitest run --project vrt",
-    "test:visual:ui": "vitest --project vrt --ui",
-    "test:visual:update": "vitest run --project vrt --update"
+    "test:visual-regression": "vitest run --project visual-regression",
+    "test:visual-regression:ui": "vitest --project visual-regression --ui",
+    "test:visual-regression:update": "vitest run --project visual-regression --update"
   },
   "author": "",
   "license": "Unlicense",
   "description": "",
   "//devDependencies": {
-    "@fontsource/noto-sans-jp": "VRT の画像が OS やコンテナに入っているフォントで変わらないよう、日本語の Web フォントを同梱する。src/style.css が 400 の太さだけを読み込む。node_modules で 85 MB、dist/ では 248 ファイル（6.8 MB）になる。",
+    "@fontsource/noto-sans-jp": "ビジュアルリグレッションテストの画像が OS やコンテナに入っているフォントで変わらないよう、日本語の Web フォントを同梱する。src/style.css が 400 の太さだけを読み込む。node_modules で 85 MB、dist/ では 248 ファイル（6.8 MB）になる。",
     "@types/node": "実行環境（手元と CI）の Node 24 に合わせて 24 系にする。25 以降は .github/dependabot.yml の ignore で止めている。",
-    "@vitest/browser-playwright": "browser と vrt プロジェクトが使う、Playwright でブラウザーを動かすプロバイダー。@vitest/browser と @vitest/ui（Vitest UI と HTML レポート）も、これの依存として入る。版は vitest と同じにする（Dependabot の vitest グループでまとめて上げる）。",
+    "@vitest/browser-playwright": "browser と visual-regression プロジェクトが使う、Playwright でブラウザーを動かすプロバイダー。@vitest/browser と @vitest/ui（Vitest UI と HTML レポート）も、これの依存として入る。版は vitest と同じにする（Dependabot の vitest グループでまとめて上げる）。",
     "playwright": "版は、VRT のコンテナのイメージ（.playwright-image のタグ）とそろえる。違うと `vrt:server` が起動しない。上げるときは .playwright-image と同じコミットで変える（Dependabot は playwright グループの PR に分ける）。",
     "tinyexec": "FIXME: 外してよい。コードからは使っていない vitest の依存。2026-04-08 に、公開から 48 時間たたない版を避けるため、ロックを古い版に留めようとして直接の依存に加えた（548c6db）。今は .npmrc の min-release-age=2 がすべての依存に同じ条件をかけている。外してもロックの中の版は変わらない（2026-10-31 に確認）。",
     "typescript": "6.0 系に留める（~）。typescript-eslint の peerDependencies が >=4.8.4 <6.1.0 で、6.1 以降を受け付けないため。FIXME: typescript-eslint が 6.1 以降に対応したら ^ に戻し、.github/dependabot.yml の ignore も外す。",
