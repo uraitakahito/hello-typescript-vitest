@@ -1,9 +1,10 @@
-import { page } from 'vitest/browser';
+import { page, server } from 'vitest/browser';
 import '@fontsource/noto-sans-jp/400.css';
 
-// A small sample card for screenshot comparisons, which has nothing to do with the ToDo app.
-// Each case compares the card as it is ("変える前") with a reference of its own and must match.
-// `changedCss` is the one change each case is about.
+// A demo of failed comparisons that keeps `npm run test:visual` green. Each case takes a small card,
+// which has nothing to do with the ToDo app, and compares it with its reference twice: as it is ("変える前"),
+// which must match, and with one change ("変えた後"), which must not, so those tests are `test.fails`.
+// Open a "変えた後" test in Vitest UI to see the Diff, Reference, Actual and Slider tabs.
 
 const cardCss = `
   .card {
@@ -45,9 +46,10 @@ const cases = [
 
 // FIXME: Vitest 5.0.5 never clears the timer that limits the wait for a stable screenshot (`timeout`,
 // 5 s by default), and `vitest run` does not exit until it fires. Every comparison that is not
-// byte-identical to its reference starts one, and the card's rounded corners can differ by one shade
-// between runs. The card is stable after two screenshots, so 1 s is plenty. Remove this once Vitest
-// clears the timer (waitForStableScreenshot in @vitest/browser).
+// byte-identical to its reference starts one: the "変えた後" tests make such comparisons on every run,
+// and the card's rounded corners can differ by one shade between runs. The card is stable after two
+// screenshots, so 1 s is plenty. Remove this once Vitest clears the timer (waitForStableScreenshot in
+// @vitest/browser).
 const matchOptions = { timeout: 1000 };
 
 async function renderCard(changedCss = '') {
@@ -68,5 +70,22 @@ async function renderCard(changedCss = '') {
 describe('変える前', () => {
   test.for(cases)('$name', async ({ reference }) => {
     await expect(await renderCard()).toMatchScreenshot(reference, matchOptions);
+  });
+});
+
+// `--update` (npm run test:visual:update) saves every screenshot that does not match as the new reference,
+// so the changed cards would replace the references. Skip them then; "変える前" keeps the references current.
+describe.skipIf(server.config.snapshotOptions.updateSnapshot === 'all')('変えた後', () => {
+  test.fails.for(cases)('$name', async ({ reference, changedCss }) => {
+    await expect(await renderCard(changedCss)).toMatchScreenshot(reference, matchOptions);
+  });
+
+  // The 1px shift changes 250 of the card's 24,960 pixels, about 1 %, so allowing 2 % lets it pass.
+  test('見出しの位置（2 % まで許す）', async () => {
+    await expect(await renderCard(shiftHeading)).toMatchScreenshot('heading-position', {
+      ...matchOptions,
+      comparatorName: 'pixelmatch',
+      comparatorOptions: { allowedMismatchedPixelRatio: 0.02 },
+    });
   });
 });
