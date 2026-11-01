@@ -4,7 +4,7 @@ import '@fontsource/noto-sans-jp/400.css';
 // A demo of failed comparisons that keeps `npm run test:visual` green. Each case takes a small card,
 // which has nothing to do with the ToDo app, and compares it with its reference twice: as it is ("変える前"),
 // which must match, and with one change ("変えた後"), which must not, so those tests are `test.fails`.
-// Open a "変えた後" test in Vitest UI to see the Diff, Reference, Actual and Slider tabs.
+// Open a "変えた後" test in Vitest UI (npm run test:visual:ui) to see the Diff, Reference, Actual and Slider tabs.
 
 const cardCss = `
   .card {

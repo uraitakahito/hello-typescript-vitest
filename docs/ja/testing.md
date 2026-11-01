@@ -67,16 +67,17 @@ npx vitest run --project browser --browser.headless=false   # テストが終わ
 `npm run test:visual` は、比べた結果が合っていたかどうかを端末に出すだけです。Vitest UI を使うと、実行の結果をブラウザーで見られ、比べて違ったときは画像も見られます。
 
 ```sh
-npm run vrt:server              # vrt プロジェクトは Playwright サーバーが要る
-npx vitest --project vrt --ui   # ブラウザーで Vitest UI が開く。q で終わる
+npm run vrt:server        # vrt プロジェクトは Playwright サーバーが要る
+npm run test:visual:ui    # ブラウザーで Vitest UI が開く。q で終わる
 ```
 
 - Vitest UI は、端末に `UI started at http://localhost:51204/__vitest__/?token=…` と出るアドレスで開きます。token もアドレスの一部なので、表示されたものを使ってください。
-- 左の一覧でテスト（`ToDo の見た目`）を選ぶと、Report タブに結果が出ます。
+- 左の一覧でテストを選ぶと、Report タブに結果が出ます。
 - 比べて違ったときは、Report タブの Test Artifacts に Visual Regression の枠が出て、4 つのタブで画像を見られます。Diff は差分画像（違う画素が赤）、Reference は基準画像、Actual は今回のスクリーンショットです。Slider では、境目を動かして Reference と Actual を比べられます。
 - 合っていたときは「The test has passed without any errors」と出るだけで、画像は出ません。基準画像は `test/vrt/__screenshots__/` にあります。
+- 何も壊さずに、比べて違ったときの画面を見たいときは、`diff-demo.vrt.test.ts` の「変えた後」のテストを選びます。どれも見本のカードをわざと 1 か所変え、比べて違うのが正しいテスト（`test.fails`）なので、成功のまま Visual Regression の枠が出ます。[ビジュアルリグレッションテスト](visual-regression.md)も見てください。
 - Vitest は終わらずに待ち、ファイルを保存するたびにテストを実行し直します。CSS を変えて、結果が変わるのを見られます。
-- `@vitest/ui` は `@vitest/browser-playwright` と一緒に入るので、足すものはありません。記録した DOM の動きも追いたいときは、`--browser.traceView` を付けます。これを含め、結果のほかの見方は[ビジュアルリグレッションテスト](visual-regression.md)にあります。
+- `@vitest/ui` は `@vitest/browser-playwright` と一緒に入るので、足すものはありません。記録した DOM の動きも追いたいときは、`npm run test:visual:ui -- --browser.traceView` で起動します。これを含め、結果のほかの見方は[ビジュアルリグレッションテスト](visual-regression.md)にあります。
 
 ## 単体テスト
 
